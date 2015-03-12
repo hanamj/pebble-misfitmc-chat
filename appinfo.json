@@ -4,7 +4,7 @@
         ""
     ],
     "companyName": "John Hanam",
-    "longName": "MisfitMC Chat",
+    "longName": "Misfit MC",
     "projectType": "pebblejs",
     "resources": {
         "media": [
@@ -29,14 +29,14 @@
                 "type": "font"
             },
             {
-                "file": "images/pb_mc_logo.png",
+                "file": "images/pb_mc_creep.png",
                 "menuIcon": true,
-                "name": "IMAGES_PB_MC_LOGO_PNG",
+                "name": "IMAGES_PB_MC_CREEP_PNG",
                 "type": "png"
             }
         ]
     },
-    "shortName": "Misfit Chat",
+    "shortName": "Misfit MC",
     "uuid": "245c4a36-e017-431a-9f3d-9266d3a9fc26",
     "versionCode": 1,
     "versionLabel": "1.0",

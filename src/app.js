@@ -19,37 +19,50 @@ var text = new UI.Text({
 // Add to splashWind1ow and show
 splashWindow.add(text);
 splashWindow.show();
-ajax(
-  {
-    url:'https://misfitmc-players.firebaseio.com/newchat.json?orderBy=%22$priority%22&limitToLast=10',
-    type:'json'
-  },
-  function(d) {
-    var text = "";
-    var name = "";
-    var msg = "";
-    for(var index in d) {
-      name = removeFormatting("" + d[index].dname);
-      if (name.length >= 15) name = name.substring(0, 5) + "..";
+
+fetchChats();
+
+function fetchChats() {
+  ajax(
+    {
+      url:'https://misfitmc-players.firebaseio.com/newchat.json?orderBy=%22$priority%22&limitToLast=10',
+      type:'json'
+    },
+    function(d) {
+      var text = "";
+      var name = "";
+      var msg = "";
+      for(var index in d) {
+        name = removeFormatting("" + d[index].dname);
+        if (name.length >= 15) name = name.substring(0, 5) + "..";
+        
+        msg = d[index].chat;
+        msg = removeFormatting(msg);
+        
+        text = "-> " + name + ":\n" + msg + "\n" + text;
+      }
       
-      msg = d[index].chat;
-      msg = removeFormatting(msg);
+      var detailCard = new UI.Card({
+        title:'Chats',
+        body: text,
+        scrollable: true
+      });
+      detailCard.show();
       
-      text = "-> " + name + ":\n" + msg + "\n" + text;
+      detailCard.on('click', 'select', function() {
+        splashWindow.show();
+        detailCard.hide();
+        setTimeout(function () {
+          fetchChats();
+        }, 100);
+      });
+      splashWindow.hide();
+    },
+    function(error) {
+      console.log('Download failed: ' + error);
     }
-    
-    var detailCard = new UI.Card({
-      title:'Chats',
-      body: text,
-      scrollable: true
-    });
-    detailCard.show();
-    splashWindow.hide();
-  },
-  function(error) {
-    console.log('Download failed: ' + error);
-  }
-);
+  );
+}
 
 function removeFormatting(str) {
   var i = str.indexOf("§");
