@@ -1,28 +1,31 @@
 var UI = require('ui');
 var ajax = require('ajax');
-var Vector2 = require('vector2');
+var Vibe = require('ui/vibe');
 
-// Show splash screen while waiting for data
-var splashWindow = new UI.Window();
+var fetching = false;
 
-// Text element to inform user
-var text = new UI.Text({
-  position: new Vector2(0, 0),
-  size: new Vector2(144, 168),
-  text:'Downloading chats...',
-  font:'GOTHIC_28_BOLD',
-  color:'black',
-  textOverflow:'wrap',
-  textAlign:'center',
-	backgroundColor:'white'
+var detailCard = new UI.Card({
+  title:'Chats',
+  body: "Loading...",
+  scrollable: true
 });
-// Add to splashWind1ow and show
-splashWindow.add(text);
-splashWindow.show();
+detailCard.on('click', 'select', function() {
+  if (!fetching) {
+    setTimeout(function () {
+      detailCard.title("Chats   **");
+    }, 5);  
+    setTimeout(function () {
+      fetchChats(detailCard);
+    }, 10);
+  }
+});
 
-fetchChats();
+detailCard.show();
 
-function fetchChats() {
+fetchChats(detailCard);
+
+function fetchChats(card) {
+  fetching = true;
   ajax(
     {
       url:'https://misfitmc-players.firebaseio.com/newchat.json?orderBy=%22$priority%22&limitToLast=10',
@@ -42,21 +45,13 @@ function fetchChats() {
         text = "-> " + name + ":\n" + msg + "\n" + text;
       }
       
-      var detailCard = new UI.Card({
-        title:'Chats',
-        body: text,
-        scrollable: true
-      });
-      detailCard.show();
-      
-      detailCard.on('click', 'select', function() {
-        splashWindow.show();
-        detailCard.hide();
-        setTimeout(function () {
-          fetchChats();
-        }, 100);
-      });
-      splashWindow.hide();
+      if (card.body() !== text) {
+        card.body(text);
+        Vibe.vibrate('short');
+      }
+      card.title("Chats");
+      //Vibe.vibrate('short');
+      fetching = false;
     },
     function(error) {
       console.log('Download failed: ' + error);
