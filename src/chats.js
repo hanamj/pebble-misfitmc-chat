@@ -24,11 +24,13 @@ function refreshChats(card) {
   if (fetchingChats) return;
   fetchingChats = true;
   setTimeout(function () {
-    card.title("Chats   **");
-  }, 5);
+    //card.title("Chats   **");
+    card.icon("images/pb_wait.png");
+  }, 1);
   setTimeout(function () {
     fetchChats(function (text) {
-      card.title("Chats");
+      //card.title("Chats");
+      card.icon("images/pb_chat.png");
       fetchingChats = false;
       
       if (card.body() !== text) {
@@ -36,7 +38,7 @@ function refreshChats(card) {
         Vibe.vibrate('short');
       }
     });
-  }, 10);
+  }, 50);
 }
 
 function fetchChats(cb) {
@@ -56,7 +58,15 @@ function fetchChats(cb) {
         msg = d[index].chat;
         msg = removeFormatting(msg);
         
-        text = "-> " + name + ":\n" + msg + "\n" + text;
+        if (d[index].type === "chat") {
+          text = "-- " + name + ":\n" + msg + "\n" + text;
+        } else if (d[index].type === "join") {
+          text = "> " + name + " joined.\n" + text;
+        } else if (d[index].type === "quit") {
+          text = "< " + name + " quit.\n" + text;
+        } else {
+          text = "* " + msg + "\n" + text;
+        }
       }
       
       cb(text);

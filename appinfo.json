@@ -29,6 +29,21 @@
                 "type": "font"
             },
             {
+                "file": "images/pb_wait.png",
+                "name": "IMAGES_PB_WAIT_PNG",
+                "type": "png"
+            },
+            {
+                "file": "images/pb_user.png",
+                "name": "IMAGES_PB_USER_PNG",
+                "type": "png"
+            },
+            {
+                "file": "images/pb_chat.png",
+                "name": "IMAGES_PB_CHAT_PNG",
+                "type": "png"
+            },
+            {
                 "file": "images/pb_mc_creep.png",
                 "menuIcon": true,
                 "name": "IMAGES_PB_MC_CREEP_PNG",
